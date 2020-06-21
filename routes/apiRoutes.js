@@ -22,7 +22,7 @@ var notesData = require("../develop/db.json");
 
 
   //Delete function
-  router.delete("/delete", function (req, res) {
+  router.delete("/delete/:id", function (req, res) {
     res.send("Deleted!")
   })
 
