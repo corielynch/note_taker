@@ -11,20 +11,30 @@ var notesData = require("../develop/db.json");
 
 // Retrieves user input from /notes page and sends it to JSON file
   router.post("/postnotes", function (req, res) {
+    
     let data = [req.body, ...notesData];
+
     let dataJSON = JSON.stringify(data);
-    console.log(dataJSON);
-    console.log("data", data);
     fs.writeFile(path.join(__dirname, "../develop/db.json"), dataJSON, function() {
       return res.send(dataJSON);
     });
   });
 
 
-  //Delete function
-  router.delete("/delete/:id", function (req, res) {
-    res.send("Deleted!")
-  })
+//Delete function
+  router.delete("/notes/:id", function(req, res) {
+    let noteId = req.params.id
+    fs.readFile("./develop/db.json", "utf8", (err, data) => {
+        if (err) throw err;
+        const allNotes = JSON.parse(data);
+        const newNotes = allNotes.filter(note => {
+            return note.id != noteId
+        });
+        fs.writeFile("./developer/db.json", JSON.stringify(newNotes, null, 2), err => {
+            res.send(JSON.stringify(newNotes));
+        });
+    });
+});
+
 
 module.exports = router;
-
